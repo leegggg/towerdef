@@ -72,9 +72,8 @@ def debugSave(im):
     )
 
 
-def paly(dft=False):
+def paly(replay=False,bossIndex=-1):
     cap = getScreen().crop(activityPart)
-    boss = True
     # start
     tplPath = "./data/tpl/menuTmp.png"
     replayPart = (787/1051, 524/591, 856/1051, 568/591)
@@ -82,18 +81,19 @@ def paly(dft=False):
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, replayPart)
     if likeness > threshold:
-        print("Menue {} DEFEATED: {}".format(likeness, dft))
-        if boss:
+        print("Menue {} DEFEATED: {}".format(likeness, replay))
+        if bossIndex >= 0:
             # Boss Black
+            dist = 95
             click((514/1051, 189/591, 514/1051, 189/591))
-            click((947/1051, 227/591, 947/1051, 227/591))
-            click((947/1051, 227/591, 947/1051, 227/591))
+            click((947/1051, 130/591+bossIndex*dist/591, 947/1051, 130/591+bossIndex*dist/591))
+            click((947/1051, 130/591+bossIndex*dist/591, 947/1051, 130/591+bossIndex*dist/591))
             return
 
-        if dft:
+        if replay:
             click(replayPart)
-        else:
-            click(battlePart)
+
+        click(battlePart)
         return
 
     # Drop Down Boss
@@ -143,7 +143,7 @@ def paly(dft=False):
                 x = hero[0]+random.randint(0, 2)*65/1051
                 y = hero[1]+random.randint(0, 3)*77/591
                 click((x, y, x, y))
-                click((800/1051, 400/591, 800/1051, 400/591))
+            click((775/1051, 400/591, 775/1051, 400/591))
         return
 
     # closeMenu
@@ -171,9 +171,9 @@ def paly(dft=False):
 
 
 def main():
-    dft = False
+    dft = True
     while True:
-        if paly(dft):
+        if paly(replay=dft,bossIndex=1):
             dft = True
         time.sleep(1)
 
