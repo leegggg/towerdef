@@ -52,11 +52,13 @@ def checkSsim(cap: PILImg, tpl: PILImg, loc):
     cap = cap.resize(size).crop(box).convert("L")
     tpl = tpl.resize(size).crop(box).convert("L")
 
+    # for very small window
     size = tpl.size
-    if size[0] < 20 or size[1] < 20:
-        size = (size[0]*5,size[1]*5)
-        cap = cap.resize(size)
-        tpl = tpl.resize(size)
+    while size[0] < 20 or size[1] < 20:
+        size = (size[0]*2,size[1]*2)
+    
+    cap = cap.resize(size)
+    tpl = tpl.resize(size)
     #cap.show()
     #tpl.show()
     likeness = ssim(pil_plugin.pil_to_ndarray(cap),
