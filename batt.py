@@ -143,7 +143,7 @@ def paly(replay=False,bossIndex=-1):
                 x = hero[0]+random.randint(0, 2)*65/1051
                 y = hero[1]+random.randint(0, 3)*77/591
                 click((x, y, x, y))
-            click((775/1051, 400/591, 775/1051, 400/591))
+        click((775/1051, 400/591, 775/1051, 400/591))
         return
 
     # closeMenu
