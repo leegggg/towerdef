@@ -28,7 +28,7 @@ def getScreen():
     im = Image.open(tempFileHost)
     im = im.resize(deviceSize)
     im.save(tempFileHost)
-    debugSave(im)
+    # debugSave(im)
     return im
 
 
@@ -74,24 +74,42 @@ def debugSave(im):
 
 def paly(dft=False):
     cap = getScreen().crop(activityPart)
-
+    boss = True
     # start
-    tplPath = "./data/menuTmp.png"
+    tplPath = "./data/tpl/menuTmp.png"
     replayPart = (787/1051, 524/591, 856/1051, 568/591)
     battlePart = (932/1051, 525/591, 1008/1051, 561/591)
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, replayPart)
     if likeness > threshold:
         print("Menue {} DEFEATED: {}".format(likeness, dft))
+        if boss:
+            # Boss
+            click((514/1051, 189/591, 514/1051, 189/591))
+            click((947/1051, 227/591, 947/1051, 227/591))
+            click((947/1051, 227/591, 947/1051, 227/591))
+            return
+
         if dft:
             click(replayPart)
         else:
             click(battlePart)
         return
 
+    # Drop Down Boss
+    part = (325/1051, 413/591, 730/1051, 485/591)
+    tplPath = "./data/tpl/dropTpl.png"
+    tpl = Image.open(tplPath)
+    likeness = checkSsim(cap, tpl, part)
+    if likeness > threshold:
+        print("Drop down {}".format(likeness))
+        # GET
+        click((627/1051, 451/591, 627/1051, 451/591))
+        return
+
     # replayChoosePart
     replayChoosePart = (651/1051, 516/591, 837/1051, 569/591)
-    tplPath = "./data/replayChooseTpl.png"
+    tplPath = "./data/tpl/replayChooseTpl.png"
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, replayChoosePart)
     if likeness > threshold:
@@ -99,29 +117,19 @@ def paly(dft=False):
         click(replayChoosePart)
         return
 
-    # closeMenu
-    part = (992/1051, 42/591, 1024/1051, 80/591)
-    tplPath = "./data/closeMenuTpl.png"
+    # DEFEATED
+    part = (445/1051, 81/591, 740/1051, 266/591)
+    tplPath = "./data/tpl/dftTpl.png"
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, part)
     if likeness > threshold:
-        print("closeMenu {}".format(likeness))
-        click(part)
-        return
-
-    # closeMenu2
-    part = (783/1051, 123/591, 815/1051, 153/591)
-    tplPath = "./data/closeMenu2Tpl.png"
-    tpl = Image.open(tplPath)
-    likeness = checkSsim(cap, tpl, part)
-    if likeness > threshold:
-        print("closeMenu2 {}".format(likeness))
-        click(part)
-        return
+        print("DEFEATED {}".format(likeness))
+        return True
 
     # play
-    part = (960/1051, 512/591, 1024/1051, 573/591)
-    tplPath = "./data/playTpl.png"
+    # part = (960/1051, 512/591, 1024/1051, 573/591)
+    part = (25/1051, 521/591, 76/1051, 574/591)
+    tplPath = "./data/tpl/playTpl.png"
     hero = (241/1051, 74/591)
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, part)
@@ -138,14 +146,26 @@ def paly(dft=False):
                 click((800/1051, 400/591, 800/1051, 400/591))
         return
 
-    # target
-    part = (445/1051, 81/591, 740/1051, 266/591)
-    tplPath = "./data/dftTpl.png"
+    # closeMenu
+    part = (992/1051, 42/591, 1024/1051, 80/591)
+    tplPath = "./data/tpl/closeMenuTpl.png"
     tpl = Image.open(tplPath)
     likeness = checkSsim(cap, tpl, part)
     if likeness > threshold:
-        print("DEFEATED {}".format(likeness))
-        return True
+        print("closeMenu {}".format(likeness))
+        click(part)
+        return
+
+    # closeMenu2
+    part = (783/1051, 123/591, 815/1051, 153/591)
+    tplPath = "./data/tpl/closeMenu2Tpl.png"
+    tpl = Image.open(tplPath)
+    likeness = checkSsim(cap, tpl, part)
+    if likeness > threshold:
+        print("closeMenu2 {}".format(likeness))
+        click(part)
+        return
+
 
     return
 
