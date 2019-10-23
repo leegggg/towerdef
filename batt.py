@@ -12,14 +12,22 @@ tempFileDevice = "/sdcard/screencaptmp.png"
 tempFileHost = "./data/screencaptmp.png"
 tempResizedFileHost = "./data/screencapresized.png"
 
-
+# landscape 
 deviceSize = (2340, 1080)
 activityPart = (76, 244, 1127, 835)
-# activitySize = (1051, 591)
-
-
 threshold = 0.8
 
+# portrait 
+deviceSize = (1080, 2340)
+activityPart = (0, 297, 1080, 905)
+threshold = 0.6
+
+# portrait q
+deviceSize = (1080, 2340)
+activityPart = (67, 75, 1013, 607)
+threshold = 0.6
+
+# activitySize = (1051, 591)
 
 def getScreen():
     os.system("{} shell screencap -d 0 -p {}".format(adb, tempFileDevice))
@@ -28,7 +36,7 @@ def getScreen():
     im = Image.open(tempFileHost)
     im = im.resize(deviceSize)
     im.save(tempFileHost)
-    # debugSave(im)
+    debugSave(im)
     return im
 
 
@@ -41,6 +49,8 @@ def checkSsim(cap: PILImg, tpl: PILImg, loc):
     )
     cap = cap.resize(tpl.size).crop(box).convert("L")
     tpl = tpl.crop(box).convert("L")
+    #cap.show()
+    #tpl.show()
     likeness = ssim(pil_plugin.pil_to_ndarray(cap),
                     pil_plugin.pil_to_ndarray(tpl))
     return likeness
@@ -173,7 +183,7 @@ def paly(replay=False,bossIndex=-1):
 def main():
     dft = True
     while True:
-        if paly(replay=dft,bossIndex=1):
+        if paly(replay=dft,bossIndex=-1):
             dft = True
         time.sleep(1)
 
