@@ -36,7 +36,7 @@ def getScreen():
     im = Image.open(tempFileHost)
     im = im.resize(deviceSize)
     im.save(tempFileHost)
-    debugSave(im)
+    # debugSave(im)
     return im
 
 
@@ -47,8 +47,16 @@ def checkSsim(cap: PILImg, tpl: PILImg, loc):
         int(loc[2]*tpl.size[0]),
         int(loc[3]*tpl.size[1])
     )
-    cap = cap.resize(tpl.size).crop(box).convert("L")
-    tpl = tpl.crop(box).convert("L")
+
+    size = tpl.size
+    cap = cap.resize(size).crop(box).convert("L")
+    tpl = tpl.resize(size).crop(box).convert("L")
+
+    size = tpl.size
+    if size[0] < 20 or size[1] < 20:
+        size = (size[0]*5,size[1]*5)
+        cap = cap.resize(size)
+        tpl = tpl.resize(size)
     #cap.show()
     #tpl.show()
     likeness = ssim(pil_plugin.pil_to_ndarray(cap),
@@ -145,7 +153,7 @@ def paly(replay=False,bossIndex=-1):
     likeness = checkSsim(cap, tpl, part)
     if likeness > threshold:
         print("Playing {}".format(likeness))
-        part = (817/1051, 9/591, 830/1051, 21/591)
+        part = (816/1051, 8/591, 830/1051, 20/591)
         likeness = checkSsim(cap, tpl, part)
         if likeness > threshold:
             print("Has mema {}".format(likeness))
@@ -183,7 +191,7 @@ def paly(replay=False,bossIndex=-1):
 def main():
     dft = True
     while True:
-        if paly(replay=dft,bossIndex=-1):
+        if paly(replay=dft,bossIndex=1):
             dft = True
         time.sleep(1)
 
