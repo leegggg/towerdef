@@ -84,7 +84,7 @@ def paly(dft=False):
     if likeness > threshold:
         print("Menue {} DEFEATED: {}".format(likeness, dft))
         if boss:
-            # Boss
+            # Boss Black
             click((514/1051, 189/591, 514/1051, 189/591))
             click((947/1051, 227/591, 947/1051, 227/591))
             click((947/1051, 227/591, 947/1051, 227/591))
