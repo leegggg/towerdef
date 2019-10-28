@@ -12,22 +12,23 @@ tempFileDevice = "/sdcard/screencaptmp.png"
 tempFileHost = "./data/screencaptmp.png"
 tempResizedFileHost = "./data/screencapresized.png"
 
-# landscape 
+# landscape
 deviceSize = (2340, 1080)
 activityPart = (76, 244, 1127, 835)
-threshold = 0.8
-
-# portrait 
-deviceSize = (1080, 2340)
-activityPart = (0, 297, 1080, 905)
 threshold = 0.6
+
+# portrait
+# deviceSize = (1080, 2340)
+# activityPart = (0, 297, 1080, 905)
+# threshold = 0.6
 
 # portrait q
-deviceSize = (1080, 2340)
-activityPart = (67, 75, 1013, 607)
-threshold = 0.6
+# deviceSize = (1080, 2340)
+# activityPart = (67, 75, 1013, 607)
+# threshold = 0.6
 
 # activitySize = (1051, 591)
+
 
 def getScreen():
     os.system("{} shell screencap -d 0 -p {}".format(adb, tempFileDevice))
@@ -55,18 +56,19 @@ def checkSsim(cap: PILImg, tpl: PILImg, loc):
     # for very small window
     size = tpl.size
     while size[0] < 20 or size[1] < 20:
-        size = (size[0]*2,size[1]*2)
-    
+        size = (size[0]*2, size[1]*2)
+
     cap = cap.resize(size)
     tpl = tpl.resize(size)
-    #cap.show()
-    #tpl.show()
+    # cap.show()
+    # tpl.show()
     likeness = ssim(pil_plugin.pil_to_ndarray(cap),
                     pil_plugin.pil_to_ndarray(tpl))
     return likeness
 
 
 def click(loc):
+    from subprocess import Popen, PIPE
     x = int(
         (loc[0]+loc[2])/2*(activityPart[2]-activityPart[0])
         + activityPart[0]
@@ -78,7 +80,8 @@ def click(loc):
     cmd = "{} shell input tap {}  {}".format(adb, x, y)
     # print(datetime.now())
     print(cmd)
-    os.system(cmd)
+    # os.system(cmd)
+    Popen(cmd, stdout=PIPE, shell=True)
     pass
 
 
@@ -92,7 +95,7 @@ def debugSave(im):
     )
 
 
-def paly(replay=False,bossIndex=-1):
+def paly(replay=False, bossIndex=-1):
     cap = getScreen().crop(activityPart)
     # start
     tplPath = "./data/tpl/menuTmp.png"
@@ -104,16 +107,20 @@ def paly(replay=False,bossIndex=-1):
         print("Menue {} DEFEATED: {}".format(likeness, replay))
         if bossIndex >= 0:
             # Boss Black
-            dist = 95
+            dist = 95/591
             click((514/1051, 189/591, 514/1051, 189/591))
-            click((947/1051, 130/591+bossIndex*dist/591, 947/1051, 130/591+bossIndex*dist/591))
-            click((947/1051, 130/591+bossIndex*dist/591, 947/1051, 130/591+bossIndex*dist/591))
+            time.sleep(0.5)
+            click((947/1051, 130/591+bossIndex*dist,
+                   947/1051, 130/591+bossIndex*dist))
+            time.sleep(0.5)
+            click((947/1051, 130/591+bossIndex*dist,
+                   947/1051, 130/591+bossIndex*dist))
             return
 
         if replay:
             click(replayPart)
-
-        click(battlePart)
+        else:
+            click(battlePart)
         return
 
     # Drop Down Boss
@@ -159,8 +166,8 @@ def paly(replay=False,bossIndex=-1):
         likeness = checkSsim(cap, tpl, part)
         if likeness > threshold:
             print("Has mema {}".format(likeness))
-            for _ in range(3):
-                x = hero[0]+random.randint(0, 2)*65/1051
+            for _ in range(1):
+                x = hero[0]+random.randint(0, 1)*65/1051
                 y = hero[1]+random.randint(0, 3)*77/591
                 click((x, y, x, y))
         click((775/1051, 400/591, 775/1051, 400/591))
@@ -186,14 +193,13 @@ def paly(replay=False,bossIndex=-1):
         click(part)
         return
 
-
     return
 
 
 def main():
-    dft = True
+    dft = False
     while True:
-        if paly(replay=dft,bossIndex=1):
+        if paly(replay=dft, bossIndex=-1):
             dft = True
         time.sleep(1)
 
