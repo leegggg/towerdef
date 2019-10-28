@@ -95,7 +95,7 @@ def debugSave(im):
     )
 
 
-def paly(replay=False, bossIndex=-1):
+def play(replay=False, bossIndex=-1):
     cap = getScreen().crop(activityPart)
     # start
     tplPath = "./data/tpl/menuTmp.png"
@@ -199,7 +199,7 @@ def paly(replay=False, bossIndex=-1):
 def main():
     dft = False
     while True:
-        if paly(replay=dft, bossIndex=-1):
+        if play(replay=dft, bossIndex=-1):
             dft = True
         time.sleep(1)
 
