@@ -13,8 +13,13 @@ tempFileHost = "./data/screencaptmp.png"
 tempResizedFileHost = "./data/screencapresized.png"
 
 # landscape
-deviceSize = (2340, 1080)
-activityPart = (76, 244, 1127, 835)
+# deviceSize = (2340, 1080)
+# activityPart = (76, 244, 1127, 835)
+# threshold = 0.6
+
+# portrait full
+deviceSize = (1080, 2340)
+activityPart = (0, 0, 1080, 2340)
 threshold = 0.6
 
 # portrait
@@ -95,7 +100,7 @@ def debugSave(im):
     )
 
 
-def paly(replay=False, bossIndex=-1):
+def play(replay=False, bossIndex=-1):
     cap = getScreen().crop(activityPart)
     # start
     tplPath = "./data/tpl/menuTmp.png"
@@ -131,7 +136,13 @@ def paly(replay=False, bossIndex=-1):
     if likeness > threshold:
         print("Drop down {}".format(likeness))
         # GET
-        click((627/1051, 451/591, 627/1051, 451/591))
+        # click((627/1051, 451/591, 627/1051, 451/591))
+        # Sell
+        click((181/526, 219/296, 181/526, 219/296))
+        time.sleep(0.5)
+        click((181/526, 219/296, 181/526, 219/296))
+        # Mat
+        # click((240/526, 226/296, 240/526, 226/296))
         return
 
     # replayChoosePart
@@ -166,11 +177,12 @@ def paly(replay=False, bossIndex=-1):
         likeness = checkSsim(cap, tpl, part)
         if likeness > threshold:
             print("Has mema {}".format(likeness))
-            for _ in range(1):
+            for _ in range(4):
                 x = hero[0]+random.randint(0, 1)*65/1051
                 y = hero[1]+random.randint(0, 3)*77/591
                 click((x, y, x, y))
-        click((775/1051, 400/591, 775/1051, 400/591))
+                time.sleep(0.05)
+        # click((775/1051, 400/591, 775/1051, 400/591))
         return
 
     # closeMenu
@@ -199,7 +211,7 @@ def paly(replay=False, bossIndex=-1):
 def main():
     dft = False
     while True:
-        if paly(replay=dft, bossIndex=-1):
+        if play(replay=dft, bossIndex=-1):
             dft = True
         time.sleep(1)
 

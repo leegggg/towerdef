@@ -1,6 +1,7 @@
 env
 data/debug
 data/screencaptmp.png
+data/conf.json
 .vscode
 # Byte-compiled / optimized / DLL files
 __pycache__/
